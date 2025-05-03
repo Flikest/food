@@ -1,0 +1,14 @@
+services:
+  postgres:
+        image: postgres:latest
+        container_name: postgresql_container
+        environment:
+            POSTGRES_USER: ${POSTGRES_USER}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+            POSTGRES_DB: ${POSTGRES_DB_NAME}
+        volumes:
+          db-data:
+            name: "my-app-data"
+        ports:
+            - ${POSTGRE_PORT}:5432
+
