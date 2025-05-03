@@ -1,9 +1,6 @@
 package services
 
 import (
-	"log/slog"
-	"strconv"
-
 	"github.com/Flikest/food/internal/storage"
 	"github.com/gofiber/fiber/v2"
 )
@@ -13,7 +10,7 @@ func (s Service) CreateGroup(ctx *fiber.Ctx) error {
 	ctx.BodyParser(&request)
 
 	var statusCodeChan = make(chan int)
-	go s.Storage.CreateGroup(request.ID, statusCodeChan)
+	go s.Storage.CreateGroup(string(request.ID), statusCodeChan)
 
 	result := <-statusCodeChan
 
@@ -54,11 +51,7 @@ func (s Service) LeaveGroup(ctx *fiber.Ctx) error {
 }
 
 func (s Service) DeleteGroup(ctx *fiber.Ctx) error {
-	stringID := ctx.Params("id")
-	ID, err := strconv.Atoi(stringID)
-	if err != nil {
-		slog.Error("error while converting data:", err)
-	}
+	ID := ctx.Params("id")
 
 	var statusCodeChan = make(chan int)
 	go s.Storage.DeleteGroup(ID, statusCodeChan)
@@ -76,18 +69,21 @@ func (s Service) GetAllGroup(ctx *fiber.Ctx) error {
 
 	go s.Storage.GetAllGroup(ch)
 
-	return ctx.JSON(<-ch)
+	result := <-ch
+
+	return ctx.JSON(result[2:])
 }
 
 func (s Service) GetAllUserFromGroup(ctx *fiber.Ctx) error {
-	stringId := ctx.Params("id")
-	ID, err := strconv.Atoi(stringId)
-	if err != nil {
-		slog.Error("error while converting data:", err)
-	}
-	ch := make(chan []string)
+	ID := ctx.Params("id")
 
+	ch := make(chan []string)
 	go s.Storage.GetAllUserFromGroup(ID, ch)
 
-	return ctx.JSON(<-ch)
+	result := <-ch
+	if len(result)-1 == 0 {
+		return ctx.JSON("There is no one in this group")
+	}
+	return ctx.JSON(result[0 : len(result)-1])
+
 }

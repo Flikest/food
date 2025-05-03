@@ -2,6 +2,7 @@ package storage
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 )
 
@@ -17,6 +18,7 @@ func (s Storage) UpdateRating(urq UpdateRatingRequest, ch chan int) {
 	switch urq.Operation {
 	case "+":
 		query := fmt.Sprintf(updateRatingQuery, "+")
+		log.Println(query)
 		_, err := s.DB.Exec(s.Context, query, urq.User_id)
 		if err != nil {
 			s.Log.Error("error when increasing rating: ", err)

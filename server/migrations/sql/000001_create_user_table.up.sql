@@ -1,7 +1,7 @@
-CREATE TABLE users(
+CREATE TABLE IF NOT EXISTS users (
     id INT NOT NULL,
     use TEXT NOT NULL,
-    avatar BLOB,
+    avatar varchar(100) NOT NULL,
     description TEXT NOT NULL,
-    rating SMALLINT NOT NULL DEFAULT 10000
-)
+    rating SMALLINT DEFAULT 10000
+);

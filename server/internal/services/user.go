@@ -1,6 +1,7 @@
 package services
 
 import (
+	"fmt"
 	"log/slog"
 	"strconv"
 
@@ -37,10 +38,10 @@ func (s Service) GetUserById(ctx *fiber.Ctx) error {
 
 	result := <-userChan
 
-	if result != nil {
+	if result == nil {
 		return ctx.JSON("user with such id not found 👀")
 	}
-	return ctx.JSON(&result)
+	return ctx.JSON(*result)
 }
 
 func (s Service) UpdateUser(ctx *fiber.Ctx) error {
@@ -68,5 +69,5 @@ func (s Service) DeleteUser(ctx *fiber.Ctx) error {
 	if result > 299 {
 		return ctx.JSON("failed to deleting user 🗑️")
 	}
-	return ctx.JSON("user with id: %s deleted 🗑️", stringID)
+	return ctx.JSON(fmt.Sprintf("user with id: %s deleted 🗑️", stringID))
 }

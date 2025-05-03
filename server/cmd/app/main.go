@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"flag"
+	"log/slog"
 	"os"
 
 	"github.com/Flikest/food/internal/database"
@@ -19,7 +20,9 @@ func main() {
 
 	flag.Parse()
 
-	godotenv.Load()
+	if err := godotenv.Load(); err != nil {
+		slog.Error("godotenv did not start")
+	}
 
 	log := logger.InitLogger(os.Getenv("LVL_DEPLOYMENT"))
 
@@ -36,10 +39,14 @@ func main() {
 		DB:      db,
 		Context: context.Background(),
 		RDB:     rdb,
+		Log:     log,
 	})
 	services := services.InitService(storage)
 	handler := handler.InitHandler(services)
 	router := handler.NewRouter()
 
-	router.Listen(":" + port)
+	if err := router.Listen(":" + port); err != nil {
+		log.Error("server not started 😞")
+	}
+	log.Info("server is runing 💱")
 }

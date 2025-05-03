@@ -20,5 +20,6 @@ func InitStorage(s Storage) *Storage {
 		Log:     s.Log,
 		DB:      s.DB,
 		Context: s.Context,
+		RDB:     s.RDB,
 	}
 }

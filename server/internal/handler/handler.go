@@ -28,13 +28,13 @@ func (h Handler) NewRouter() *fiber.App {
 			userRouter.Delete("/:id", h.Service.DeleteUser)
 		}
 
-		groupsRouter := v1.Group("/rooms")
+		groupsRouter := v1.Group("/room")
 		{
 			groupsRouter.Get("/:id", h.Service.GetAllUserFromGroup)
 			groupsRouter.Get("/", h.Service.GetAllGroup)
 			groupsRouter.Post("/", h.Service.CreateGroup)
 			groupsRouter.Post("/join", h.Service.JoinGroup)
-			groupsRouter.Delete("/leave/:id", h.Service.LeaveGroup)
+			groupsRouter.Delete("/leave/", h.Service.LeaveGroup)
 			groupsRouter.Delete("/:id", h.Service.DeleteGroup)
 
 		}
