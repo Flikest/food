@@ -1,17 +1,20 @@
 import os
 from dotenv import load_dotenv
 import telebot
-from api.api import find_places
+from api.api import *
 load_dotenv()
 user_data = {} #dict for users {'chat_id': '_user_status'}]
 dish_data = {}
 bot = telebot.TeleBot(os.getenv('BOT_TOKEN'))
 
+
 @bot.message_handler(commands=['start'])
 def welcome(message):
     chat_id = message.chat.id
-    #TODO: Check if user in database
-    #True
+    photo = bot.get_user_profile_photos(chat_id)
+    avatar_id = photo.photos[0][-1].file_unique_id
+    blank = 'Я калоед !!1!'
+    create_user(chat_id, message.chat.username, avatar_id, blank,10000)
     bot.send_message(chat_id, 'Здравствуйте, отправьте название блюда, которое вы хотели бы попробовать.')
     user_data[chat_id] = '_is_writing_dish'
     #False
