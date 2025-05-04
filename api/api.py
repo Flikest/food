@@ -8,11 +8,12 @@ def find_places(location,food):
     parametrs =  {
             'q': food,
             'location':location,
-            'radius': 1000,
+            'radius': 10000,
             'sort': 'distance',
             'key': MAP_TOKEN,
-            'point':location,
+            'type': 'branch'
             }
 
-    responce = requests.get('https://catalog.api.2gis.com/3.0/items', params = parametrs)
-    return responce
+    response = requests.get('https://catalog.api.2gis.com/3.0/items', params = parametrs)
+    response = response.json()
+    return response

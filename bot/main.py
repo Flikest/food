@@ -3,7 +3,8 @@ from dotenv import load_dotenv
 import telebot
 from api.api import find_places
 load_dotenv()
-user_data = {} #dict for users {'chat_id': '_user_status'}
+user_data = {} #dict for users {'chat_id': '_user_status'}]
+dish_data = {}
 bot = telebot.TeleBot(os.getenv('BOT_TOKEN'))
 
 @bot.message_handler(commands=['start'])
@@ -42,14 +43,23 @@ def handle_message(message):
 
         bot.send_message(chat_id, 'Поздравляю, вы были зарегестрированы, теперь напишите команду /start еще раз.')
     if user_data[chat_id] == '_is_writing_dish':
-        dish = message.text
+        dish_data[chat_id] = message.text
+
         user_data[chat_id] = '_is_sending_geo'
         bot.send_message(chat_id, 'Пожалуйста, отправьте свою геолокацию.')
+
+@bot.message_handler(content_types=['location'])
+def location_handler(message):
+    chat_id = message.chat.id
     if user_data[chat_id] == '_is_sending_geo' and message.location is not None:
-        response = find_places(message.location ,dish)
+        location = str(message.location.latitude) + ', ' + str(message.location.longitude)
+        response = find_places(location, dish_data[chat_id])
         print(1)
-        user_data[chat_id] = '_is_selecting_restaurance'
-    if user_data[chat_id] == '_is_selecting_restaurance':
-        bot.send_message(chat_id, 'Ресторан ))')
+        print(response)
+        for i in response['result']['items']:
+            name = i['name']
+            address = i['address_name']
+            bot.send_message(chat_id, name + ' ' + address)
+
 bot.infinity_polling()
 
