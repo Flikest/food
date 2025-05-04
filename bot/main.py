@@ -14,12 +14,10 @@ def welcome(message):
     bot.send_message(chat_id, 'Здравствуйте, отправьте название блюда, которое вы хотели бы попробовать.')
     #user_data[chat_id] = '_is_writing_dish'
     #False
-    bot.send_message(chat_id, 'Здравствуйте, это бот для поиска где и с кем вы можете покушать ту еду, которую вы выбрали.')
+    bot.send_message(chat_id, 'Здравствуйте, это бот для поиска где и с кем вы можете поесть ту еду, которую вы выбрали.')
     bot.send_message(chat_id, 'Давайте создадим вам анкету.')
     bot.send_message(chat_id, 'Введите свой пол:')
     user_date[char_id] = '_is_writing_sex'
-    # bot.send_message(chat_id, 'Введите свой возраст:')
-    # bot.send_message(chat_id, 'Введите описание для своей анкеты')
 
 @bot.message_handler(func = lambda message: True):
 def handle_message(message):
