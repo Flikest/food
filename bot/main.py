@@ -43,7 +43,7 @@ def handle_message(message):
         bot.send_message(chat_id, 'Поздравляю, вы были зарегестрированы, теперь напишите команду /start еще раз.')
     if user_data[chat_id] = '_is_writing_dish':
         #TODO: Make api request and processing an api response
-
+        
         #Show restorance (mb in button to make them clickable) and other users
         user_data[chat_id] = '_is_selecting_restaurant'
 
